@@ -18,8 +18,7 @@ namespace Daggerfall.Player {
 			Area exterior = location.Exterior, interior = location.Interior;
 			var model = state.Models.RecordList[0].Contents;
 			
-			return;
-			//new PGame().Run();
+			new PGame().Run();
 		}
 
 		public PGame() {

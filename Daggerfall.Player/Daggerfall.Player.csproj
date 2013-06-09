@@ -35,6 +35,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MonoGame.Framework, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -53,10 +54,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MonoGame\MonoGame.Framework\MonoGame.Framework.WindowsGL.csproj">
-      <Project>{7de47032-a904-4c29-bd22-2d235e8d91ba}</Project>
-      <Name>MonoGame.Framework.WindowsGL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Daggerfall\Daggerfall.csproj">
       <Project>{71840c53-1e3f-4ded-b629-596a29cdb9bc}</Project>
       <Name>Daggerfall</Name>

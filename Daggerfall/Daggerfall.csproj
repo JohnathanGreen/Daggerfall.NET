@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MonoGame.Framework, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -66,12 +67,6 @@
     <Compile Include="Region.cs" />
     <Compile Include="RegionCode.cs" />
     <Compile Include="State.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\MonoGame\MonoGame.Framework\MonoGame.Framework.WindowsGL.csproj">
-      <Project>{7de47032-a904-4c29-bd22-2d235e8d91ba}</Project>
-      <Name>MonoGame.Framework.WindowsGL</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\System.Collections.Generic\" />
