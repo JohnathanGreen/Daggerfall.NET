@@ -1,104 +1,139 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Daggerfall {
-    public class BsaArchiveRecordInfo
-    {
-		public BsaArchiveRecordInfo(string name, int id, int offset, int size) {
-			Name = name;
-			Id = id;
-			Offset = offset;
-			Size = size;
+	public abstract class BsaRecord {
+		public BsaRecord(int offset, int size) {
+			this.Offset = offset;
+			this.Size = size;
 		}
 
-		public readonly string Name;
-		public readonly int Id;
 		public readonly int Offset;
 		public readonly int Size;
+	}
+
+    public class BsaRecord<TContents, TId, TArchive> : BsaRecord where TContents : class where TArchive : BsaArchive<TContents, TId, TArchive>
+    {
+		internal BsaRecord(TArchive archive, TId id, int offset, int size) : base(offset, size) {
+			this.Archive = archive;
+			this.Id = id;
+		}
+
+		public readonly TArchive Archive;
+		public readonly TId Id;
+
+		/// <summary>
+		/// Get the contents of this record.
+		/// </summary>
+		public TContents Contents {
+			get {
+				TContents result;
+				if (!contents.TryGetTarget(out result)) {
+					Archive.Reader.BaseStream.Position = Offset;
+					result = Archive.Load(this);
+					contents.SetTarget(result);
+				}
+				return result;
+			}
+		}
+
+		internal WeakReference<TContents> contents = new WeakReference<TContents>(null);
     }
 
-	public abstract class BsaArchive<TRecord> : StateObject where TRecord : class {
-		class Record : BsaArchiveRecordInfo {
-            public Record(string name, int id, int offset, int size) : base(name, id, offset, size)
-            {
-            }
+	public abstract class BsaArchive<TValue, TId, TArchive> : StateObject where TValue : class where TArchive : BsaArchive<TValue, TId, TArchive> {
+		#region Constructors
 
-			public WeakReference<TRecord> Value = null;
+		public class Record : BsaRecord<TValue, TId, TArchive> {
+			internal Record(TArchive archive, TId id, int offset, int size) : base(archive, id, offset, size) { }
 		}
 
 		public BsaArchive(State state, string path) : this(state, File.OpenRead(path)) { }
 
 		public BsaArchive(State state, Stream stream) : this(state, new BinaryReader(stream)) { }
 
-		public BsaArchive(State state, BinaryReader reader) : base(state) {
-			if(reader == null) throw new ArgumentNullException("reader");
+		public BsaArchive(State state, BinaryReader reader)
+			: base(state) {
+			if (reader == null) throw new ArgumentNullException("reader");
 			Reader = reader;
+			recordsReadOnly = new ReadOnlyDictionary<TId, Record>(records);
+			recordListReadOnly = new ReadOnlyCollection<Record>(recordList);
 
 			var count = reader.ReadUInt16();
 			var type = reader.ReadUInt16();
-			bool names;
+			bool names = UsesNames;
 
-			if(type == 0x100) names = true;
-			else if(type == 0x200) names = false;
-			else throw new Exception();
-			UsesNames = names;
+			if (type != TypeCode) throw new Exception();
 
 			reader.BaseStream.Seek(-count * (names ? 18 : 8), SeekOrigin.End);
 			int offset = 4;
-			Record[] records = Records = new Record[count];
-			for(int recordIndex = 0; recordIndex < count; recordIndex++) {
-				string name = null;
-				int id = -1, size;
-
-				if(names)
-					name = reader.ReadNulTerminatedAsciiString(14);
-				else 
-					id = reader.ReadInt32();
+			recordList = new Record[count];
+			for (int recordIndex = 0; recordIndex < count; recordIndex++) {
+				TId id = ReadId();
+				int size;
 
 				size = reader.ReadInt32();
-				Record record = records[recordIndex] = new Record(name, id, offset, size);
+				Record record = recordList[recordIndex] = new Record((TArchive)this, id, offset, size);
 				offset += size;
 
-				if(names)
-					RecordsByName[name] = record;
-				else
-					RecordsById[id] = record;
+				records[id] = record;
 			}
 		}
+
+		#endregion Constructors
+
+		#region Internals and fields
+
+		readonly Record[] recordList;
+		readonly ReadOnlyCollection<Record> recordListReadOnly;
+		readonly Dictionary<TId, Record> records = new Dictionary<TId, Record>();
+		readonly ReadOnlyDictionary<TId, Record> recordsReadOnly;
+
+		#endregion Internals and fields
+
+		#region Properties
 
 		public readonly BinaryReader Reader;
-		readonly Record[] Records;
-		readonly Dictionary<string, Record> RecordsByName = new Dictionary<string, Record>();
-		readonly Dictionary<int, Record> RecordsById = new Dictionary<int, Record>();
 
-		public readonly bool UsesNames;
-		public bool UsesIndexes { get { return !UsesNames; } }
+		/// <summary>Get the collection of records indexed by their Id.</summary>
+		public ReadOnlyDictionary<TId, Record> Records { get { return recordsReadOnly; } }
 
-		TRecord Load(Record record) {
-			TRecord value = null;
-			bool result = record.Value != null && record.Value.TryGetTarget(out value);
+		/// <summary>Get the flat collection of records in the order they appear in the file.</summary>
+		public ReadOnlyCollection<Record> RecordList { get { return recordListReadOnly; } }
 
-			if(!result) {
-				Reader.BaseStream.Position = record.Offset;
-				record.Value = new WeakReference<TRecord>(value = Load(Reader, record));
-			}
-			return value;
-		}
+		protected abstract ushort TypeCode { get; }
+		public bool UsesNames { get { return typeof(TId) == typeof(string); } }
+		public bool UsesIndexes { get { return typeof(TId) == typeof(int); } }
 
-		protected abstract TRecord Load(BinaryReader reader, BsaArchiveRecordInfo record);
+		#endregion Properties
 
-		public TRecord this[int id] { get { return Load(RecordsById[id]); } }
-		public TRecord this[string name] { get { return Load(RecordsByName[name]); } }
+		#region Methods
 
-		public TRecord GetRecordAtIndex(int index) {
-			return Load(Records[index]);
-		}
+		protected abstract TId ReadId();
 
-        /// <summary>Get the number of records in the archive.</summary>
-        public int Count { get { return Records.Length; } }
+		#endregion Methods
+
+		protected abstract TValue Load(Record record);
+		internal TValue Load(BsaRecord<TValue, TId, TArchive> record) { return Load((Record)record); }
+	}
+
+	public abstract class BsaInt32IdArchive<TRecord> : BsaArchive<TRecord, int, BsaInt32IdArchive<TRecord>> where TRecord : class {
+		public BsaInt32IdArchive(State state, string path) : base(state, path) { }
+
+		protected override ushort TypeCode { get { return 0x200; } }
+
+		protected override int ReadId() { return Reader.ReadInt32(); }
+	}
+
+	public abstract class BsaStringIdArchive<TRecord> : BsaArchive<TRecord, string, BsaStringIdArchive<TRecord>> where TRecord : class {
+		public BsaStringIdArchive(State state, string path) : base(state, path) { }
+
+		protected override ushort TypeCode { get { return 0x100; } }
+
+		protected override string ReadId() { return Reader.ReadNulTerminatedAsciiString(14); }
 	}
 }

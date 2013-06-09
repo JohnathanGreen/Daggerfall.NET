@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Daggerfall {
-
-	public enum LocationType {
+	public enum LocationType : byte {
 		/// <summary>City, colored light rose.</summary>
 		City = 0x80,
 

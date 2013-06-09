@@ -57,10 +57,6 @@
       <Project>{7de47032-a904-4c29-bd22-2d235e8d91ba}</Project>
       <Name>MonoGame.Framework.WindowsGL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\XnaExtensions\XnaExtensions.csproj">
-      <Project>{64c19d8f-1ae3-40de-b29d-c1474281868d}</Project>
-      <Name>XnaExtensions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Daggerfall\Daggerfall.csproj">
       <Project>{71840c53-1e3f-4ded-b629-596a29cdb9bc}</Project>
       <Name>Daggerfall</Name>

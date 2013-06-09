@@ -54,8 +54,8 @@ namespace Daggerfall {
 		Wayrest,
 	}
 
-	public enum BlockIndexPrefix {
-		Tavern = 0,
+	public enum BlockIndexPrefix : byte {
+		Tavern,
 		GeneralStore,
 		Residence,
 		Weaponsmith,

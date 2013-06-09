@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Daggerfall {
-	public enum BuildingType {
+	public enum BuildingType : byte {
 		Alchemist = 0x00,
 		HouseForSale = 0x01,
 		Armorer = 0x02,

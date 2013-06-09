@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daggerfall", "Daggerfall\Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daggerfall.Player", "Daggerfall.Player\Daggerfall.Player.csproj", "{32CFAEAE-8017-4DF0-A5CF-93809AAF8253}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XnaExtensions", "..\XnaExtensions\XnaExtensions.csproj", "{64C19D8F-1AE3-40DE-B29D-C1474281868D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lidgren.Network.Windows", "..\MonoGame\ThirdParty\Lidgren.Network\Lidgren.Network.Windows.csproj", "{AE483C29-042E-4226-BA52-D247CE7676DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Framework.WindowsGL", "..\MonoGame\MonoGame.Framework\MonoGame.Framework.WindowsGL.csproj", "{7DE47032-A904-4C29-BD22-2D235E8D91BA}"
@@ -31,12 +29,6 @@ Global
 		{32CFAEAE-8017-4DF0-A5CF-93809AAF8253}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32CFAEAE-8017-4DF0-A5CF-93809AAF8253}.Release|Any CPU.Build.0 = Release|Any CPU
 		{32CFAEAE-8017-4DF0-A5CF-93809AAF8253}.Release|x86.ActiveCfg = Release|Any CPU
-		{64C19D8F-1AE3-40DE-B29D-C1474281868D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64C19D8F-1AE3-40DE-B29D-C1474281868D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64C19D8F-1AE3-40DE-B29D-C1474281868D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{64C19D8F-1AE3-40DE-B29D-C1474281868D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64C19D8F-1AE3-40DE-B29D-C1474281868D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64C19D8F-1AE3-40DE-B29D-C1474281868D}.Release|x86.ActiveCfg = Release|Any CPU
 		{AE483C29-042E-4226-BA52-D247CE7676DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AE483C29-042E-4226-BA52-D247CE7676DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE483C29-042E-4226-BA52-D247CE7676DA}.Debug|x86.ActiveCfg = Debug|Any CPU

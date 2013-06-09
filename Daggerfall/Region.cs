@@ -87,7 +87,7 @@ namespace Daggerfall {
 		public RegionArchive(State state, string path)
 			: base(state) {
 			archive = new BaseArchive(state, path);
-			regions = new Region[archive.Count / 4];
+			regions = new Region[archive.Records.Count / 4];
 		}
 
 		public int Count { get { return regions.Length; } }
@@ -98,10 +98,10 @@ namespace Daggerfall {
 					var region = regions[index] = new Region(State, index);
 					string extension = string.Format(".{0:D3}", index);
 					archive.region = region;
-					var boop = archive[MapNames + extension];
-					boop = archive[MapTable + extension];
-					boop = archive[MapPItem + extension];
-					boop = archive[MapDItem + extension];
+					var boop = archive.Records[MapNames + extension];
+					boop = archive.Records[MapTable + extension];
+					boop = archive.Records[MapPItem + extension];
+					boop = archive.Records[MapDItem + extension];
 				}
 				return regions[index];
 			}
@@ -112,21 +112,21 @@ namespace Daggerfall {
 
 		const string MapNames = "MAPNAMES", MapTable = "MAPTABLE", MapPItem = "MAPPITEM", MapDItem = "MAPDITEM";
 
-		class BaseArchive : BsaArchive<object> {
+		class BaseArchive : BsaStringIdArchive<object> {
 			internal Region region;
 
 			public BaseArchive(State state, string path) : base(state, path) { }
 
-			protected override object Load(BinaryReader reader, BsaArchiveRecordInfo record) {
-				if(record.Name.StartsWith(MapNames))
-					region.LoadMapNames(reader);
-				else if(record.Name.StartsWith(MapTable)) {
+			protected override object Load(Record record) {
+				if(record.Id.StartsWith(MapNames))
+					region.LoadMapNames(Reader);
+				else if(record.Id.StartsWith(MapTable)) {
 					foreach(var location in region.Locations)
-						location.LoadMapTable(reader);
-				} else if(record.Name.StartsWith(MapPItem)) {
-					region.LoadMapPItem(reader);
-				} else if(record.Name.StartsWith(MapDItem)) {
-					region.LoadMapDItem(reader);
+						location.LoadMapTable(Reader);
+				} else if(record.Id.StartsWith(MapPItem)) {
+					region.LoadMapPItem(Reader);
+				} else if(record.Id.StartsWith(MapDItem)) {
+					region.LoadMapDItem(Reader);
 				} else
 					throw new NotImplementedException();
 				return null;

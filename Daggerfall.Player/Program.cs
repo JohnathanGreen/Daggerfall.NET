@@ -16,6 +16,7 @@ namespace Daggerfall.Player {
 			var region = regions[0];
 			var location = region.Locations[0];
 			Area exterior = location.Exterior, interior = location.Interior;
+			var model = state.Models.RecordList[0].Contents;
 			
 			return;
 			//new PGame().Run();
@@ -58,7 +59,7 @@ namespace Daggerfall.Player {
 			GraphicsDevice.Clear(ClearOptions.DepthBuffer | ClearOptions.Stencil | ClearOptions.Target, Color.Black, 1, 0);
 			GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
-            var model = Models.GetRecordAtIndex(modelIndex);
+            var model = Models.RecordList[modelIndex].Contents;
 
             GraphicsDevice.SetVertexBuffer(model.VertexBuffer);
             GraphicsDevice.Indices = model.IndexBuffer;
@@ -104,7 +105,7 @@ namespace Daggerfall.Player {
             if (CheckRepeat(keyboard, Keys.PageUp, gameTime, ref lastPrevious, repeatTime))
                 modelIndex = Math.Max(0, modelIndex - 1);
             if (CheckRepeat(keyboard, Keys.PageDown, gameTime, ref lastNext, repeatTime))
-                modelIndex = Math.Min(Models.Count - 1, modelIndex + 1);
+                modelIndex = Math.Min(Models.Records.Count - 1, modelIndex + 1);
 
             base.Update(gameTime);
         }

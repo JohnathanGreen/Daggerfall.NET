@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Daggerfall {
-	public class ModelArchive : BsaArchive<Model> {
+	public class ModelArchive : BsaInt32IdArchive<Model> {
 		public ModelArchive(State state, string path) : base(state, path) { }
 
-		protected override Model Load(System.IO.BinaryReader reader, BsaArchiveRecordInfo record) {
-			return new Model(State, reader, record.Size);
+		protected override Model Load(Record record) {
+			return new Model(State, Reader, record.Size);
 		}
 	}
 
