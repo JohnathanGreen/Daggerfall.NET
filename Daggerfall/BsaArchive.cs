@@ -61,7 +61,6 @@ namespace Daggerfall {
 			if (reader == null) throw new ArgumentNullException("reader");
 			Reader = reader;
 			recordsReadOnly = new ReadOnlyDictionary<TId, Record>(records);
-			recordListReadOnly = new ReadOnlyCollection<Record>(recordList);
 
 			var count = reader.ReadUInt16();
 			var type = reader.ReadUInt16();
@@ -72,6 +71,7 @@ namespace Daggerfall {
 			reader.BaseStream.Seek(-count * (names ? 18 : 8), SeekOrigin.End);
 			int offset = 4;
 			recordList = new Record[count];
+			recordListReadOnly = new ReadOnlyCollection<Record>(recordList);
 			for (int recordIndex = 0; recordIndex < count; recordIndex++) {
 				TId id = ReadId();
 				int size;

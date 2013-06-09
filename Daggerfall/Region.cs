@@ -98,10 +98,10 @@ namespace Daggerfall {
 					var region = regions[index] = new Region(State, index);
 					string extension = string.Format(".{0:D3}", index);
 					archive.region = region;
-					var boop = archive.Records[MapNames + extension];
-					boop = archive.Records[MapTable + extension];
-					boop = archive.Records[MapPItem + extension];
-					boop = archive.Records[MapDItem + extension];
+					var boop = archive.Records[MapNames + extension].Contents;
+					boop = archive.Records[MapTable + extension].Contents;
+					boop = archive.Records[MapPItem + extension].Contents;
+					boop = archive.Records[MapDItem + extension].Contents;
 				}
 				return regions[index];
 			}

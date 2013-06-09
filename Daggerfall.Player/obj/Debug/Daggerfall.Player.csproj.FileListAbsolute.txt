@@ -1,0 +1,15 @@
+D:\Projects\Daggerfall\Daggerfall.Player\bin\Debug\Daggerfall.Player.exe.config
+D:\Projects\Daggerfall\Daggerfall.Player\bin\Debug\Daggerfall.Player.exe
+D:\Projects\Daggerfall\Daggerfall.Player\bin\Debug\Daggerfall.Player.pdb
+D:\Projects\Daggerfall\Daggerfall.Player\bin\Debug\Daggerfall.dll
+D:\Projects\Daggerfall\Daggerfall.Player\bin\Debug\MonoGame.Framework.dll
+D:\Projects\Daggerfall\Daggerfall.Player\bin\Debug\OpenTK.dll
+D:\Projects\Daggerfall\Daggerfall.Player\bin\Debug\Lidgren.Network.dll
+D:\Projects\Daggerfall\Daggerfall.Player\bin\Debug\Tao.Sdl.dll
+D:\Projects\Daggerfall\Daggerfall.Player\bin\Debug\MonoGame.Framework.pdb
+D:\Projects\Daggerfall\Daggerfall.Player\bin\Debug\Daggerfall.pdb
+D:\Projects\Daggerfall\Daggerfall.Player\bin\Debug\Lidgren.Network.pdb
+D:\Projects\Daggerfall\Daggerfall.Player\bin\Debug\Lidgren.Network.xml
+D:\Projects\Daggerfall\Daggerfall.Player\obj\Debug\Daggerfall.Player.csprojResolveAssemblyReference.cache
+D:\Projects\Daggerfall\Daggerfall.Player\obj\Debug\Daggerfall.Player.exe
+D:\Projects\Daggerfall\Daggerfall.Player\obj\Debug\Daggerfall.Player.pdb
