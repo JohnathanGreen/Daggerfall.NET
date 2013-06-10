@@ -1,0 +1,200 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<stetic-interface>
+  <configuration>
+    <images-root-path>..</images-root-path>
+    <target-gtk-version>2.12</target-gtk-version>
+  </configuration>
+  <import>
+    <widget-library name="../../External/GLWidget/GLWidget/bin/Debug/GLWidget.dll" />
+    <widget-library name="../bin/Debug/Daggerfall.Editor.dll" internal="true" />
+  </import>
+  <widget class="Gtk.Window" id="Daggerfall.Editor.Viewer" design-size="400 300">
+    <property name="MemberName" />
+    <property name="Title" translatable="yes">Daggerfall Viewer</property>
+    <property name="WindowPosition">CenterOnParent</property>
+    <child>
+      <widget class="Gtk.Notebook" id="sectionNotebook">
+        <property name="MemberName" />
+        <property name="CanFocus">True</property>
+        <property name="CurrentPage">2</property>
+        <child>
+          <widget class="Gtk.VBox" id="gameSection">
+            <property name="MemberName" />
+            <property name="Spacing">6</property>
+            <property name="BorderWidth">5</property>
+            <child>
+              <widget class="Gtk.HBox" id="gamePathContainer">
+                <property name="MemberName" />
+                <property name="Spacing">6</property>
+                <child>
+                  <widget class="Gtk.Label" id="gamePathLabel">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">Source path:</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">0</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                    <property name="Padding">7</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.FileChooserButton" id="gamePathChooser">
+                    <property name="MemberName" />
+                    <property name="Title" translatable="yes">Select the folder of your Daggerfall copy.</property>
+                    <property name="Action">SelectFolder</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="AutoSize">True</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">0</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.HButtonBox" id="playButtonContainer">
+                <property name="MemberName" />
+                <property name="Size">1</property>
+                <property name="LayoutStyle">End</property>
+                <child>
+                  <widget class="Gtk.Button" id="playButton">
+                    <property name="MemberName" />
+                    <property name="Tooltip" translatable="yes">Start playing Daggerfall with these settings.</property>
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextOnly</property>
+                    <property name="Label" translatable="yes">Play</property>
+                    <property name="UseUnderline">True</property>
+                  </widget>
+                  <packing>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="Position">1</property>
+                <property name="AutoSize">True</property>
+                <property name="Expand">False</property>
+                <property name="Fill">False</property>
+              </packing>
+            </child>
+          </widget>
+        </child>
+        <child>
+          <widget class="Gtk.Label" id="gameSectionLabel">
+            <property name="MemberName" />
+            <property name="Tooltip" translatable="yes">Manage the game and start playing.</property>
+            <property name="LabelProp" translatable="yes">Game</property>
+          </widget>
+          <packing>
+            <property name="type">tab</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.HPaned" id="blocksSection">
+            <property name="MemberName" />
+            <property name="CanFocus">True</property>
+            <property name="Position">1</property>
+            <property name="BorderWidth">5</property>
+            <signal name="Shown" handler="OnBlocksPaneShown" />
+            <child>
+              <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow">
+                <property name="MemberName" />
+                <property name="ShadowType">In</property>
+                <child>
+                  <widget class="Gtk.NodeView" id="blockList">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="ShowScrollbars">True</property>
+                    <property name="Reorderable">True</property>
+                    <signal name="RowActivated" handler="OnBlockListRowActivated" />
+                  </widget>
+                </child>
+              </widget>
+              <packing>
+                <property name="Resize">False</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="Gtk.Notebook" id="notebook2">
+                <property name="MemberName" />
+                <property name="CanFocus">True</property>
+                <property name="CurrentPage">0</property>
+                <property name="TabPos">Left</property>
+                <child>
+                  <widget class="Gtk.ScrolledWindow" id="GtkScrolledWindow1">
+                    <property name="MemberName" />
+                    <property name="ShadowType">In</property>
+                    <child>
+                      <widget class="Gtk.NodeView" id="blockChunkList">
+                        <property name="MemberName" />
+                        <property name="CanFocus">True</property>
+                        <property name="ShowScrollbars">True</property>
+                        <property name="Reorderable">True</property>
+                      </widget>
+                    </child>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="Gtk.Label" id="label1">
+                    <property name="MemberName" />
+                    <property name="LabelProp" translatable="yes">Chunks</property>
+                  </widget>
+                  <packing>
+                    <property name="type">tab</property>
+                  </packing>
+                </child>
+              </widget>
+            </child>
+          </widget>
+          <packing>
+            <property name="Position">1</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Label" id="blocksSectionLabel">
+            <property name="MemberName" />
+            <property name="Tooltip" translatable="yes">Blocks are collections of parts of buildings/interior pieces, objects, people, and items that can be joined together in a Location under Region.</property>
+            <property name="LabelProp" translatable="yes">Blocks</property>
+          </widget>
+          <packing>
+            <property name="type">tab</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.GLWidget" id="glwidget">
+            <property name="MemberName" />
+            <property name="SingleBuffer">False</property>
+            <property name="ColorBPP">32</property>
+            <property name="AccumulatorBPP">0</property>
+            <property name="DepthBPP">32</property>
+            <property name="StencilBPP">0</property>
+            <property name="Samples">8</property>
+            <property name="Stereo">False</property>
+            <property name="GlVersionMajor">0</property>
+            <property name="GlVersionMinor">0</property>
+          </widget>
+          <packing>
+            <property name="Position">2</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="Gtk.Label" id="label5">
+            <property name="MemberName" />
+            <property name="LabelProp" translatable="yes">page3</property>
+          </widget>
+          <packing>
+            <property name="type">tab</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+</stetic-interface>

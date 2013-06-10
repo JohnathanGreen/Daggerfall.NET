@@ -16,7 +16,7 @@ namespace Daggerfall {
 			U4 = reader.ReadBytes(5);
 
 			for(int index = 0; index < buildings.Length; index++)
-				buildings[index] = new Building(this, index, reader);
+				buildings[index] = new Building(this, null, index, reader);
 			this.Buildings = new ReadOnlyCollection<Building>(buildings);
 
 			UnusedName = reader.ReadNulTerminatedAsciiString(32);
@@ -29,7 +29,7 @@ namespace Daggerfall {
 			int height = reader.ReadByte();
 			U6 = reader.ReadBytes(7);
 
-			Blocks = new ExteriorBlock[width, height];
+			Blocks = new ExteriorBlockIndex[width, height];
 			for(int x = 0; x < width; x++)
 				for(int y = 0; y < height; y++)
 					Blocks[x, y].prefix = reader.ReadByte();
@@ -65,7 +65,7 @@ namespace Daggerfall {
 		public readonly int[] U8;
 		public readonly int U5, U9;
 
-		public readonly ExteriorBlock[,] Blocks;
+		public readonly ExteriorBlockIndex[,] Blocks;
 
 		/// <summary>The list of buildings in the exterior area.</summary>
 		public readonly ReadOnlyCollection<Building> Buildings;

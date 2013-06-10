@@ -59,6 +59,8 @@ namespace Microsoft.Xna.Framework
                     // Only report the change if the game window was active on the last update to get a proper delta.
                     if (wasActive && (ReportStationaryMouse || position != centre))
                         OnMouseMoved(position, centre, state);
+                    if (!wasActive)
+                        position = centre;
                     Mouse.SetPosition(centre.X, centre.Y);
                     oldMousePosition = centre;
                 }

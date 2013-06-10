@@ -12,16 +12,19 @@ namespace Daggerfall {
 	public class Building : StateObject {
 		#region Constructors
 
-		internal Building(Exterior exterior, int index, BinaryReader reader) : base(exterior.State) {
+		internal Building(Exterior exterior, ExteriorBlock block, int index, BinaryReader reader) 
+			: base(((StateObject)block ?? exterior).State) {
 			Exterior = exterior;
+			Block = block;
 			Index = index;
 
 			NameSeed = reader.ReadUInt16();
 			reader.ReadZeroes(16);
-			FactionId = reader.ReadUInt16();
+			FactionId = new FactionIndex(reader.ReadUInt16());
 			Sector = reader.ReadInt16();
 			var locationId = reader.ReadUInt16();
-			if(locationId != exterior.Id) throw new Exception();
+			if(exterior != null && locationId != exterior.Id) throw new Exception();
+			if (exterior == null && locationId != 0) throw new Exception();
 			Type = (BuildingType)reader.ReadByte();
 			Quality = reader.ReadByte();
 		}
@@ -34,17 +37,19 @@ namespace Daggerfall {
 
 		#region Properties
 
+		/// <summary>Get the <see cref="Daggerfall.Block"/> that this <see cref="Building"/> is in, or <c>null</c> if this <see cref="Building"/> is in an <see cref="Daggerfall.Exterior"/> (accessed by <see cref="Exterior"/>).</summary>
+		public readonly Block Block;
+
+		/// <summary>Get the <see cref="Daggerfall.Exterior"/> that this <see cref="Building"/> is in, or <c>null</c> if this <see cref="Building"/> is in a <see cref="Daggerfall.Block"/> (accessed by <see cref="Block"/>).</summary>
 		public readonly Exterior Exterior;
 
-		public readonly int FactionId;
+		public readonly FactionIndex FactionId;
 
 		public readonly int Index;
 
 		public readonly int NameSeed;
 
-		/// <summary>
-		/// Quality of the <see cref="Building"/>, from 1 to 20. Dividing by 4 gets a rating on the "rusty relics" to "incense burning" scale.
-		/// </summary>
+		/// <summary>Get the quality of the <see cref="Building"/>, from 1 to 20. Dividing by 4 gets a rating on the "rusty relics" to "incense burning" scale.</summary>
 		public readonly int Quality;
 
 		public readonly int Sector;

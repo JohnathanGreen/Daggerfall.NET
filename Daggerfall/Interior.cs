@@ -16,15 +16,15 @@ namespace Daggerfall {
 			U4 = reader.ReadInt32();
 			U5 = reader.ReadInt32();
 
-			Blocks = new InteriorBlock[reader.ReadUInt16()];
+			Blocks = new InteriorBlockIndex[reader.ReadUInt16()];
 			U6 = reader.ReadBytes(5);
 
 			for(int index = 0, count = Blocks.Length; index < count; index++)
-				Blocks[index] = new InteriorBlock(reader.ReadByte(), reader.ReadByte(), reader.ReadUInt16());
+				Blocks[index] = new InteriorBlockIndex(reader.ReadByte(), reader.ReadByte(), reader.ReadUInt16());
 		}
 
 		public readonly int U4, U5;
 		public readonly byte[] U6;
-		public readonly InteriorBlock[] Blocks;
+		public readonly InteriorBlockIndex[] Blocks;
 	}
 }

@@ -26,6 +26,7 @@ namespace Daggerfall {
 
 		public readonly TArchive Archive;
 		public readonly TId Id;
+        internal WeakReference<TContents> contents = new WeakReference<TContents>(null);
 
 		/// <summary>
 		/// Get the contents of this record.
@@ -42,7 +43,9 @@ namespace Daggerfall {
 			}
 		}
 
-		internal WeakReference<TContents> contents = new WeakReference<TContents>(null);
+		public override string ToString() { return string.Format("{{{0}, {1}, {2}}}", Id, Offset, Size); }
+
+		public static implicit operator TContents(BsaRecord<TContents, TId, TArchive> record) { return record.Contents; }
     }
 
 	public abstract class BsaArchive<TValue, TId, TArchive> : StateObject where TValue : class where TArchive : BsaArchive<TValue, TId, TArchive> {

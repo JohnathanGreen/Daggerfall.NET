@@ -1,0 +1,9 @@
+Daggerfall.Player/obj/
+Daggerfall.Player/bin/
+Daggerfall.Gtk/obj/
+Daggerfall.Editor/bin/
+Daggerfall.Editor/obj/
+Daggerfall/bin/
+External/GLWidget/GLWidget/obj/
+External/Lidgren.Network/bin/
+External/Lidgren.Network/obj/

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,7 +11,7 @@ namespace Daggerfall {
 	public abstract class Block : StateObject {
 		#region Constructors
 
-		public Block(State state) : base(state) {
+		public Block(State state, BinaryReader reader) : base(state) {
 		}
 
 		#endregion Constructors
@@ -24,6 +26,8 @@ namespace Daggerfall {
 
 		#region Methods
 
+        public abstract void Draw(BasicEffect effect, ref Matrix world, bool exterior, bool interior);
+
 		#endregion Methods
 	}
 
@@ -31,7 +35,9 @@ namespace Daggerfall {
 		public BlockArchive(State state, string path) : base(state, path) { }
 
 		protected override Block Load(Record record) {
-			string extension = Path.GetExtension(record.Id);
+			if (record.Id.EndsWith(".RMB")) return new ExteriorBlock(State, Reader, record);
+			if (record.Id.EndsWith(".RDB")) return new InteriorBlock(State, Reader);
+			if (record.Id == "FOO" || record.Id.EndsWith(".RDI")) return null;
 			throw new NotImplementedException();
 		}
 	}

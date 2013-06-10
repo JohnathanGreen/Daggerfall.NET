@@ -14,6 +14,7 @@ namespace Microsoft.Xna.Framework
 
         public static readonly Angle Zero = new Angle(0);
 
+		public static Angle Daggerfall(int value) { return new Angle(value / ToDaggerfall); }
         public static Angle Degrees(float value) { return new Angle(value / ToDegrees); }
         public static Angle Radians(float value) { return new Angle(value / ToRadians); }
 
@@ -25,11 +26,13 @@ namespace Microsoft.Xna.Framework
 
         const float ToDegrees = (float)(ToRadians * 180 / Math.PI);
         const float ToRadians = 1;
+		const float ToDaggerfall = (float)(ToRadians * 1024 / Math.PI);
 
         #endregion Internals and fields
 
         #region Properties
 
+		public int InDaggerfall { get { return (int)(value * ToDaggerfall); } }
         public float InDegrees { get { return value * ToDegrees; } }
         public float InRadians { get { return value * ToRadians; } }
 

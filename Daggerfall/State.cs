@@ -21,6 +21,7 @@ namespace Daggerfall {
 
 		#region Internals and fields
 
+		BlockArchive blocks;
 		readonly GraphicsDevice graphics;
 		ModelArchive models;
 		readonly string path;
@@ -29,6 +30,8 @@ namespace Daggerfall {
 		#endregion Internals and fields
 
 		#region Properties
+
+		public BlockArchive Blocks { get { return blocks ?? (blocks = new BlockArchive(this, path + "BLOCKS.BSA")); } }
 
 		public GraphicsDevice Graphics { get { return graphics; } }
 

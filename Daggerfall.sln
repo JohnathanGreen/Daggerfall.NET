@@ -5,6 +5,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daggerfall", "Daggerfall\Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daggerfall.Player", "Daggerfall.Player\Daggerfall.Player.csproj", "{32CFAEAE-8017-4DF0-A5CF-93809AAF8253}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daggerfall.Editor", "Daggerfall.Editor\Daggerfall.Editor.csproj", "{DEA36ED4-04F2-4DA3-B59E-ABEC56EEFB26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLWidget", "External\GLWidget\GLWidget\GLWidget.csproj", "{34627299-AB51-4C99-B5DA-C03EB751B387}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{7EDDB754-F6DE-422F-852F-1EF6C3DC0CB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame.Framework.WindowsGL", "External\MonoGame.Framework\MonoGame.Framework.WindowsGL.csproj", "{7DE47032-A904-4C29-BD22-2D235E8D91BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lidgren.Network.Windows", "External\Lidgren.Network\Lidgren.Network.Windows.csproj", "{AE483C29-042E-4226-BA52-D247CE7676DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,8 +35,42 @@ Global
 		{32CFAEAE-8017-4DF0-A5CF-93809AAF8253}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32CFAEAE-8017-4DF0-A5CF-93809AAF8253}.Release|Any CPU.Build.0 = Release|Any CPU
 		{32CFAEAE-8017-4DF0-A5CF-93809AAF8253}.Release|x86.ActiveCfg = Release|Any CPU
+		{DEA36ED4-04F2-4DA3-B59E-ABEC56EEFB26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEA36ED4-04F2-4DA3-B59E-ABEC56EEFB26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEA36ED4-04F2-4DA3-B59E-ABEC56EEFB26}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DEA36ED4-04F2-4DA3-B59E-ABEC56EEFB26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEA36ED4-04F2-4DA3-B59E-ABEC56EEFB26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEA36ED4-04F2-4DA3-B59E-ABEC56EEFB26}.Release|x86.ActiveCfg = Release|Any CPU
+		{34627299-AB51-4C99-B5DA-C03EB751B387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34627299-AB51-4C99-B5DA-C03EB751B387}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34627299-AB51-4C99-B5DA-C03EB751B387}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{34627299-AB51-4C99-B5DA-C03EB751B387}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34627299-AB51-4C99-B5DA-C03EB751B387}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34627299-AB51-4C99-B5DA-C03EB751B387}.Release|x86.ActiveCfg = Release|Any CPU
+		{7DE47032-A904-4C29-BD22-2D235E8D91BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DE47032-A904-4C29-BD22-2D235E8D91BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DE47032-A904-4C29-BD22-2D235E8D91BA}.Debug|x86.ActiveCfg = Debug|x86
+		{7DE47032-A904-4C29-BD22-2D235E8D91BA}.Debug|x86.Build.0 = Debug|x86
+		{7DE47032-A904-4C29-BD22-2D235E8D91BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DE47032-A904-4C29-BD22-2D235E8D91BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DE47032-A904-4C29-BD22-2D235E8D91BA}.Release|x86.ActiveCfg = Release|x86
+		{7DE47032-A904-4C29-BD22-2D235E8D91BA}.Release|x86.Build.0 = Release|x86
+		{AE483C29-042E-4226-BA52-D247CE7676DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE483C29-042E-4226-BA52-D247CE7676DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE483C29-042E-4226-BA52-D247CE7676DA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AE483C29-042E-4226-BA52-D247CE7676DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE483C29-042E-4226-BA52-D247CE7676DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE483C29-042E-4226-BA52-D247CE7676DA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{34627299-AB51-4C99-B5DA-C03EB751B387} = {7EDDB754-F6DE-422F-852F-1EF6C3DC0CB1}
+		{7DE47032-A904-4C29-BD22-2D235E8D91BA} = {7EDDB754-F6DE-422F-852F-1EF6C3DC0CB1}
+		{AE483C29-042E-4226-BA52-D247CE7676DA} = {7EDDB754-F6DE-422F-852F-1EF6C3DC0CB1}
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Daggerfall.Player\Daggerfall.Player.csproj
 	EndGlobalSection
 EndGlobal

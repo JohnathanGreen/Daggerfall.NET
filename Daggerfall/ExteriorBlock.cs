@@ -1,112 +1,92 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Daggerfall {
-	public struct ExteriorBlock {
-		static readonly String[] PrefixStrings = new string[] { "TVRN", "GENR", "RESI", "WEAP", "ARMR", "ALCH", "BANK", "BOOK", "CLOT", "FURN", "GEMS", "LIBR", "PAWN", "TEMP", "TEMP", "PALA", "FARM", "DUNG", "CAST", "MANR", "SHRI", "RUIN", "SHCK", "GRVE", "FILL", "KRAV", "KDRA", "KOWL", "KMOO", "KCAN", "KFLA", "KHOR", "KROS", "KWHE", "KSCA", "KHAW", "MAGE", "THIE", "DARK", "FIGH", "CUST", "WALL", "MARK", "SHIP", "WITC" };
+	public class ExteriorBlock : Block {
+		#region Constructors
 
-		static readonly string[] TempleNumberStrings = new string[] { "A0", "B0", "C0", "D0", "E0", "F0", "G0", "H0" };
+		internal ExteriorBlock(State state, BinaryReader reader, BlockArchive.Record record) : base(state, reader) {
+			this.ChunkCount = reader.ReadByte();
+			int modelCount = reader.ReadByte();
+			int flatCount = reader.ReadByte();
 
-		static readonly string[] CustomIndexStrings = new string[] { "AA", "BA", "AL", "BL", "AM", "BM", "AS", "BS", "GA", "GL", "GM", "GS" };
+			for (int index = 0; index < Chunks.Length; index++)
+				Chunks[index] = new ExteriorChunk(this, reader, index);
+			for (int index = 0; index < Chunks.Length; index++)
+				Chunks[index].building = new Building(null, this, index, reader);
+            for (int index = 0; index < Chunks.Length; index++)
+            {
+                Chunks[index].Unknowns.Add(reader.ReadUInt16());
+                Chunks[index].Unknowns.Add(reader.ReadUInt16());
+            }
 
-		internal byte prefix, number, character;
+			int[] chunkSizeList = new int[32];
+			for (int index = 0; index < chunkSizeList.Length; index++)
+				chunkSizeList[index] = reader.ReadInt32();
 
-		public BlockIndexPrefix Prefix { get { return (BlockIndexPrefix)prefix; } }
+			U1 = reader.ReadBytes(8);
+			for (int y = 0, yCount = Ground.GetLength(1); y < yCount; y++)
+				for (int x = 0, xCount = Ground.GetLength(0); x < xCount; x++)
+					Ground[x, y] = new Ground(reader.ReadByte());
+			U2 = reader.ReadBytes(256);
 
-		public string BlockName(ExteriorBlockIndexCustom custom) {
-			string text = PrefixStrings[prefix];
+			for (int y = 0, yCount = Automap.GetLength(1); y < yCount; y++)
+				for (int x = 0, xCount = Automap.GetLength(0); x < xCount; x++)
+					Automap[x, y] = reader.ReadByte();
 
-			if(Prefix == BlockIndexPrefix.Temple || Prefix == BlockIndexPrefix.Temple2) {
-				if(character > 7)
-					text += "GA";
-				else
-					text += "AA";
-				text += TempleNumberStrings[character & 7];
-			} else {
-				int customIndex = character >> 4;
+			string filename = reader.ReadNulTerminatedAsciiString(13);
+			if (filename != record.Id) throw new Exception();
+            for (int index = 0; index < Chunks.Length; index++)
+                Chunks[index].LoadFilename(reader);
 
-				if(Prefix == BlockIndexPrefix.Custom) {
-					switch(custom) {
-						case ExteriorBlockIndexCustom.Default: customIndex = 0; break;
-						case ExteriorBlockIndexCustom.Sentinel: customIndex = 8; break;
-						case ExteriorBlockIndexCustom.Wayrest: customIndex = Math.Max(0, customIndex - 1); break;
-						default: throw new Exception();
-					}
-				}
+            for (int index = 0; index < ChunkCount; index++)
+            {
+                long start = reader.BaseStream.Position;
+                Chunks[index].LoadContents(reader);
+                int required = chunkSizeList[index];
+                long size = reader.BaseStream.Position - start;
 
-				text += CustomIndexStrings[customIndex];
-				text += (char)((number >> 4) + '0');
-				text += (char)((number & 15) + '0');
-				text += ".RMB";
-				if((number >> 4) > 9 || (number & 15) > 9) throw new Exception();
-			}
+                if (size == required - 1)
+                {
+                    reader.ReadByte();
+                    size++;
+                }
 
-			return text;
+                if (required != size)
+                    throw new Exception();
+            }
 		}
-	}
 
-	public enum ExteriorBlockIndexCustom {
-		Default,
-		Sentinel,
-		Wayrest,
-	}
+        #endregion Constructors
 
-	public enum BlockIndexPrefix : byte {
-		Tavern,
-		GeneralStore,
-		Residence,
-		Weaponsmith,
-		Armorer,
-		Alchemist,
-		Bank,
-		Bookseller,
-		Clothier,
-		FurnitureStore,
-		Jeweler,
-		Library,
-		PawnBroker,
+        #region Internals and fields
 
-		/// <summary>Triggers special logic for producing the letters.</summary>
-		Temple,
+        #endregion Internals and fields
 
-		/// <summary>Triggers special logic for producing the letters.</summary>
-		Temple2,
+        #region Properties
 
-		Palace,
-		Farm,
-		Dungeon,
-		Castle,
-		Manor,
-		Shrine,
-		Ruins,
-		Shack,
-		Cemetery,
-		Filler,
-		OrderOfTheRaven,
-		KnightsOfTheRaven,
-		KnightsOfTheDragon,
-		KnightsOfTheOwl,
+        public readonly int ChunkCount;
+		public readonly ExteriorChunk[] Chunks = new ExteriorChunk[32];
+		public readonly Ground[,] Ground = new Ground[16, 16];
+		public readonly byte[,] Automap = new byte[64, 64]; // If nonzero, subtract one to get a BuildingType.
+		public readonly byte[] U1, U2;
 
-		/// <summary>Unused</summary>
-		KnightsOfTheMoon,
-		OrderOfTheCandle,
-		KnightsOfTheFlame,
-		HostOfTheHorn,
-		KnightsOfTheRose,
-		KnightsOfTheWheel,
-		OrderOfTheScarab,
-		KnightsOfTheHawk,
-		MagesGuild,
-		ThievesGuild,
-		DarkBrotherhood,
-		FightersGuild,
-		Custom,
-		Wall,
-		Market,
-		Ship,
-		Coven,
+		#endregion Properties
+
+		#region Methods
+
+        public override void Draw(BasicEffect effect, ref Matrix world, bool exterior, bool interior)
+        {
+            for (int index = 0; index < ChunkCount; index++)
+                Chunks[index].Draw(effect, ref world, exterior, interior);
+        }
+
+		#endregion Methods
 	}
 }

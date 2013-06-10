@@ -15,10 +15,10 @@ namespace Daggerfall {
 			this.Location = location;
 			bool interior = this is Interior;
 
-			Door[] doors = new Door[reader.ReadInt32()];
+			AreaDoor[] doors = new AreaDoor[reader.ReadInt32()];
 			for(int index = 0; index < doors.Length; index++)
-				doors[index] = new Door(this, index, reader);
-			Doors = new ReadOnlyCollection<Door>(doors);
+				doors[index] = new AreaDoor(this, index, reader);
+			Doors = new ReadOnlyCollection<AreaDoor>(doors);
 
 			if(reader.ReadInt32() != 1) throw new Exception();
 			reader.ReadZeroes(3);
@@ -61,6 +61,6 @@ namespace Daggerfall {
 		public readonly int U1, U2, U3a;
 		public readonly byte[] U3;
 
-		public readonly ReadOnlyCollection<Door> Doors;
+		public readonly ReadOnlyCollection<AreaDoor> Doors;
 	}
 }

@@ -1,31 +1,41 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Daggerfall {
-	public struct InteriorBlock {
-		internal InteriorBlock(byte x, byte z, ushort blockIndex) {
-			this.X = x;
-			this.Z = z;
-			this.BlockIndex = blockIndex;
+	public class InteriorBlock : Block {
+		#region Constructors
+
+		internal InteriorBlock(State state, BinaryReader reader) : base(state, reader) {
+			//throw new NotImplementedException();
 		}
 
-		static readonly string[] IndexStrings = new string[] { "N", "W", "L", "S", "B", "M" };
+		#endregion Constructors
 
-		readonly ushort BlockIndex;
+		#region Internals and fields
 
-		public readonly byte X;
-		public readonly byte Z;
+		#endregion Internals and fields
 
-		/// <summary>Get whether this is where the player starts in the dungeon. There may only be one <see cref="InteriorBlock"/> with this flag set.</summary>
-		public bool IsStartingBlock { get { return (BlockIndex & (1 << 10)) != 0; } }
+		#region Properties
 
-		public string BlockName {
-			get {
-				return string.Format("{0}{1}.RDB", IndexStrings[BlockIndex >> 11], BlockIndex & 1023);
-			}
-		}
+		#region Dependency properties
+
+		#endregion Dependency properties
+
+		#endregion Properties
+
+		#region Methods
+
+        public override void Draw(BasicEffect effect, ref Matrix world, bool exterior, bool interior)
+        {
+            throw new NotImplementedException();
+        }
+
+		#endregion Methods
 	}
 }

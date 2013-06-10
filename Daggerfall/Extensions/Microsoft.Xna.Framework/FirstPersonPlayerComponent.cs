@@ -24,7 +24,9 @@ namespace Microsoft.Xna.Framework
             KeyStrafeRight = Keys.D;
             KeyFlyUp = Keys.E;
             KeyFlyDown = Keys.Q;
+            KeyRun = Keys.LeftShift;
             WalkSpeed = 10;
+            RunMultiplier = 2;
             FlyUpDirection = new Vector3(0, 10, 0);
 
             Game.Activated += OnGameActivatedChanged;
@@ -102,11 +104,18 @@ namespace Microsoft.Xna.Framework
 
         public Keys KeyFlyDown { get; set; }
 
+        public Keys KeyRun { get; set; }
+
         /// <summary>Get or set the direction and scale of flying up. The default is (0, 10, 0).</summary>
         public Vector3 FlyUpDirection { get; set; }
 
         /// <summary>Get or set how quickly the player walks. The default is 10.</summary>
         public float WalkSpeed { get; set; }
+
+        /// <summary>Get or set how much faster <see cref="WalkSpeed"/> is than <see cref="RunSpeed"/>. The default is 2.</summary>
+        public float RunMultiplier { get; set; }
+
+        public float RunSpeed { get { return WalkSpeed * RunMultiplier; } set { RunMultiplier = value / WalkSpeed; } }
 
         #endregion Properties
 
@@ -154,10 +163,14 @@ namespace Microsoft.Xna.Framework
             mouse.Position = new Vector2l(Game.Context.Viewport.Width / 2, Game.Context.Viewport.Height / 2);
             LastMousePosition = new Vector2l(Game.Context.Viewport.Width / 2, Game.Context.Viewport.Height / 2);*/
 
+            bool run = keyboard.IsKeyDown(KeyRun);
+            float walkSpeed = run ? RunSpeed : WalkSpeed;
+            Vector3 flyDirection = run ? FlyUpDirection * RunMultiplier : FlyUpDirection;
+
             if (keyboard.IsKeyDown(KeyFlyUp))
-                Position += FlyUpDirection;
+                Position += flyDirection;
             if (keyboard.IsKeyDown(KeyFlyDown))
-                Position -= FlyUpDirection;
+                Position -= flyDirection;
 
             Vector2 facing = new Vector2(0, -1).Rotate(Yaw); // Positive is forward, negative is backwards.
             Vector2 strafing = new Vector2(1, 0).Rotate(Yaw); // Positive is right, negative is left.
@@ -173,7 +186,7 @@ namespace Microsoft.Xna.Framework
                 movement -= strafing;
 
             if (movement != Vector2.Zero)
-                Position += new Vector3(movement.X, 0, movement.Y).Normalized() * WalkSpeed;
+                Position += new Vector3(movement.X, 0, movement.Y).Normalized() * walkSpeed;
 
             Pitch = Pitch.MaxDegrees(-90);
             Pitch = Pitch.MinDegrees(90);

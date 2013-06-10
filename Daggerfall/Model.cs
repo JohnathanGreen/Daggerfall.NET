@@ -183,6 +183,20 @@ namespace Daggerfall {
 
 		#region Methods
 
+        public void Draw(BasicEffect effect, ref Matrix world)
+        {
+            var graphics = effect.GraphicsDevice;
+            graphics.SetVertexBuffer(VertexBuffer);
+            graphics.Indices = IndexBuffer;
+            effect.World = world;
+
+            foreach (var pass in effect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+                graphics.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, VertexBuffer.VertexCount, 0, IndexBuffer.IndexCount / 3);
+            }
+        }
+
 		public override string ToString() {
 			return string.Format("{0}(Radius {1}, {2}, {3}, {4} point[s], {5} plane[s], {6} object[s])", GetType().Name, Radius, U2, U3, Points.Length, Planes.Length, Objects.Length);
 		}
@@ -194,7 +208,7 @@ namespace Daggerfall {
 		internal ModelPlane(BinaryReader reader, bool earlyVersion) {
 			int pointCount = reader.ReadByte();
 			U1 = reader.ReadByte();
-			TextureInfo = reader.ReadUInt16();
+			TextureIndex = new TextureIndex(reader.ReadUInt16());
 			U2 = reader.ReadUInt16();
 			U3 = reader.ReadUInt16();
 
@@ -220,19 +234,17 @@ namespace Daggerfall {
 		}
 
 		Vector3 normal;
-		ushort TextureInfo;
 
 		public readonly byte U1;
 		public readonly ushort U2, U3;
 		public readonly ModelPlanePoint[] Points;
 		public readonly byte[] Data = new byte[24];
 		public Vector3 Normal { get { return normal; } }
+        public readonly TextureIndex TextureIndex;
 
-		public int FileIndex { get { return TextureInfo >> 7; } }
-		public int ImageIndex { get { return TextureInfo & 0x7F; } }
 
 		public override string ToString() {
-			return string.Format("{{{0}, {1}, {2}, {3} point[s], {4}, texture {5}.{6}}}", U1, U2, U3, Points.Length, Normal, FileIndex, ImageIndex);
+			return string.Format("{{{0}, {1}, {2}, {3} point[s], {4}, texture {5}}}", U1, U2, U3, Points.Length, Normal, TextureIndex);
 		}
 	}
 
