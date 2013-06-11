@@ -15,6 +15,29 @@ namespace Daggerfall
 
         static byte[] asciiData = new byte[256];
 
+        public static int[] ReadInt32Array(this BinaryReader reader, int count)
+        {
+            int[] array = new int[count];
+            unsafe
+            {
+                fixed (int* pointer = array)
+                    for (int* current = pointer, end = pointer + count; current < end; current++)
+                        *current = reader.ReadInt32();
+            }
+            return array;
+        }
+
+        public static uint[] ReadUInt32Array(this BinaryReader reader, int count)
+        {
+            uint[] array = new uint[count];
+            unsafe {
+                fixed(uint* pointer = array)
+                    for(uint* current = pointer, end = pointer + count; current < end; current++)
+                        *current = reader.ReadUInt32();
+            }
+            return array;
+        }
+
         public static string ReadNulTerminatedAsciiString(this BinaryReader reader, int maximumLength)
         {
             lock (asciiData)
@@ -121,6 +144,27 @@ namespace Daggerfall
         public static bool CheckRepeat(this KeyboardState keyboard, Keys key, GameTime gameTime, ref TimeSpan lastTime, TimeSpan repeatTime)
         {
             return keyboard.IsKeyDown(key) && gameTime.CheckRepeat(ref lastTime, repeatTime);
+        }
+
+        public static int CheckNextPreviousKeys(this KeyboardState keyboard, Keys next, Keys previous, TimeSpan repeatTime, GameTime gameTime, ref TimeSpan lastNext, ref TimeSpan lastPrevious) {
+            int value = 0;
+            if(keyboard.CheckRepeat(next, gameTime, ref lastNext, repeatTime))
+                value++;
+            if(keyboard.CheckRepeat(previous, gameTime, ref lastPrevious, repeatTime))
+                value--;
+            return value;
+        }
+
+        /// <summary>
+        /// Constrain the value from 0 to count-1, wrapping values as necessary. For example, a value of -2 will return count-2.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public static int Wrap(this int value, int count) {
+            value %= count;
+            if (value < 0) value += count;
+            return value;
         }
     }
 }

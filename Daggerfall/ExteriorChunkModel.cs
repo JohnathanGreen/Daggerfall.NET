@@ -26,7 +26,7 @@ namespace Daggerfall
         public readonly int Index;
         public readonly int ModelId;
 
-        public Model Model { get { return State.Models.Records[ModelId]; } }
+        public Model Model { get { return State.Models.RecordMap[ModelId].Value; } }
 
         public Vector3 Position { get; protected set; }
         public readonly Unknowns Unknowns = new Unknowns();

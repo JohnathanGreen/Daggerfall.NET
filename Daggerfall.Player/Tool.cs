@@ -57,7 +57,7 @@ namespace Daggerfall.Player
         {
             get
             {
-                return string.Format("Change tool with Home/End ({0} of {1}; {2})", Game.CurrentTool + 1, Game.Tools.Count, Game.Tools[Game.CurrentTool].ToolName);
+                return string.Format("Tool: Home/End ({0}/{1}; {2})", Game.CurrentTool + 1, Game.Tools.Count, Game.Tools[Game.CurrentTool].ToolName);
             }
         }
 
@@ -65,30 +65,10 @@ namespace Daggerfall.Player
         {
             var font = Game.Font;
             string text = string.Format(format, args);
-            Game.Batch.DrawString(font, text, point + new Vector2(-1, -1), Color.Black);
-            Game.Batch.DrawString(font, text, point + new Vector2(1, -1), Color.Black);
-            Game.Batch.DrawString(font, text, point + new Vector2(-1, 1), Color.Black);
-            Game.Batch.DrawString(font, text, point + new Vector2(1, 1), Color.Black);
-            Game.Batch.DrawString(font, text, point + new Vector2(1, 0), Color.Black);
-            Game.Batch.DrawString(font, text, point + new Vector2(-1, 0), Color.Black);
-            Game.Batch.DrawString(font, text, point + new Vector2(0, 1), Color.Black);
-            Game.Batch.DrawString(font, text, point + new Vector2(0, -1), Color.Black);
-            Game.Batch.DrawString(font, text, point, Color.NavajoWhite);
+            Game.Batch.DrawAlignedString(font, text, point, Color.NavajoWhite, Alignment.Left);
             point += new Vector2(0, font.LineSpacing);
         }
 
-        TimeSpan lastPrevious, lastNext;
-        public static readonly TimeSpan RepeatTime = TimeSpan.FromSeconds(1 / 20.0);
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-            var keyboard = Keyboard.GetState();
-
-            if(keyboard.CheckRepeat(Keys.Home, gameTime, ref lastPrevious, RepeatTime))
-                Game.CurrentTool--;
-            if (keyboard.CheckRepeat(Keys.End, gameTime, ref lastNext, RepeatTime))
-                Game.CurrentTool++;
-        }
+        public static readonly TimeSpan KeyRepeatTime = TimeSpan.FromSeconds(1 / 10.0);
     }
 }

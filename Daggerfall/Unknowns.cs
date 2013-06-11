@@ -41,6 +41,10 @@ namespace Daggerfall
         public void Add(string label, int value) { Add(new Value(label, value)); }
         public void Add(string label, byte[] value) { Add(new Value(label, value)); }
 
+        public void AddByte(string label, BinaryReader reader) { Add(label, reader.ReadByte()); }
+        public void AddBytes(string label, BinaryReader reader, int count) { Add(label, reader.ReadBytes(count)); }
+        public void AddUInt16(string label, BinaryReader reader) { Add(label, reader.ReadUInt16()); }
+        public void AddInt32(string label, BinaryReader reader) { Add(label, reader.ReadInt32()); }
 
         public override string ToString()
         {

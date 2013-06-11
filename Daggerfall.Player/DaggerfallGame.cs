@@ -1,12 +1,14 @@
 ﻿using Daggerfall.Editor;
 using Gtk;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Resources;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +18,8 @@ namespace Daggerfall.Player
     public class DaggerfallGame : Game
     {
         #region Fields
+
+        const bool StartFullScreen = false;
 
         int currentTool;
         string path;
@@ -31,7 +35,7 @@ namespace Daggerfall.Player
             get { return currentTool; }
             set
             {
-                value = Math.Max(0, Math.Min(Tools.Count - 1, value));
+                value = value.Wrap(Tools.Count);
                 if (currentTool != value)
                 {
                     Tools[currentTool].Enabled = Tools[currentTool].Visible = false;
@@ -52,75 +56,6 @@ namespace Daggerfall.Player
 
         #endregion Properties
 
-        static void Main(string[] args)
-        {
-            Application.Init("Daggerfall", ref args);
-#if false
-			var viewer = new Viewer() {
-			};
-
-			viewer.DeleteEvent += (o, a) => Application.Quit();
-			viewer.Show();
-			Application.Run();
-#else
-            string path = Properties.Settings.Default.DaggerfallPath;
-            int check;
-
-            while ((check = CheckPath(ref path)) != 1)
-            {
-                if (check < 0)
-                    return;
-                var chooser = new Gtk.FileChooserDialog("Select the path Daggerfall is in.", null, FileChooserAction.SelectFolder,
-                    "Select", ResponseType.Accept, "Cancel", ResponseType.Cancel);
-
-                chooser.Show();
-                if (chooser.Run() == (int)ResponseType.Accept)
-                {
-                    path = chooser.Filename;
-                } else
-                    return;
-                chooser.Destroy();
-            }
-
-            Properties.Settings.Default.DaggerfallPath = path;
-            Properties.Settings.Default.Save();
-
-            new DaggerfallGame(path).Run();
-            //new GtkApp().Run();
-
-#endif
-        }
-
-        static int CheckPath(ref string path)
-        {
-            if (path == null || path == "")
-            {
-                if (new MessageDialog(null, DialogFlags.Modal, MessageType.Info, ButtonsType.OkCancel, "Please select the path you've installed Daggerfall to. You can select either the main folder or the ARENA2 folder.").Run() == (int)ResponseType.Cancel)
-                    return -1;
-                return 0;
-            }
-            else
-            {
-                if (!File.Exists(path + Path.DirectorySeparatorChar + "SKY00.DAT"))
-                {
-                    string subpath = path + Path.DirectorySeparatorChar + "ARENA2";
-                    if (Directory.Exists(subpath))
-                    {
-                        path = subpath;
-                        return CheckPath(ref path);
-                    }
-                }
-
-                if (!File.Exists(path + Path.DirectorySeparatorChar + "ARCH3D.BSA"))
-                {
-                    if (new MessageDialog(null, DialogFlags.Modal, MessageType.Error, ButtonsType.OkCancel, "Daggerfall seems to be copied to this path, but it has not been installed in DOS. Please do this or hit cancel and wait for me to figure out the compression.").Run() == (int)ResponseType.Cancel)
-                        return -1;
-                    return 0;
-                }
-            }
-                return 1;
-        }
-
         GraphicsDeviceManager manager;
 
         public DaggerfallGame(string path)
@@ -129,11 +64,11 @@ namespace Daggerfall.Player
 
             manager = new GraphicsDeviceManager(this)
             {
-                PreferredBackBufferWidth = GraphicsDeviceManager.DefaultBackBufferWidth,
-                PreferredBackBufferHeight = GraphicsDeviceManager.DefaultBackBufferHeight,
+                PreferredBackBufferWidth = StartFullScreen ? 1 : GraphicsDeviceManager.DefaultBackBufferWidth,
+                PreferredBackBufferHeight = StartFullScreen ? 1 : GraphicsDeviceManager.DefaultBackBufferHeight,
                 PreferMultiSampling = true,
                 SynchronizeWithVerticalRetrace = true,
-                IsFullScreen = true,
+                IsFullScreen = StartFullScreen,
             };
 
             Components.Add(Viewer = new FirstPersonPlayerComponent(this)
@@ -148,21 +83,33 @@ namespace Daggerfall.Player
 
             new ModelBrowserTool(this);
             new BlockBrowserTool(this);
+            new TextureBrowserTool(this);
             Tools[0].Enabled = Tools[0].Visible = true;
         }
 
         protected override void LoadContent()
         {
+            Content = new ResourceContentManager(Services, Properties.Resources.ResourceManager);
             base.LoadContent();
             State = new State(GraphicsDevice, path + "\\");
             Effect = new BasicEffect(GraphicsDevice);
-            var block = State.Blocks.RecordList[0].Contents;
+            var block = State.Blocks.Records[0].Archive;
             var models = State.Models;
 
-            Font = Content.Load<SpriteFont>("DebugFont");
+            Font = Content.Load<SpriteFont>("UIFont");
             Batch = new SpriteBatch(GraphicsDevice);
 
-            manager.IsFullScreen = true;
+            manager.IsFullScreen = StartFullScreen;
+        }
+
+        TimeSpan lastPrevious, lastNext;
+
+        protected override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            var keyboard = Keyboard.GetState();
+
+            CurrentTool += keyboard.CheckNextPreviousKeys(Keys.End, Keys.Home, Tool.KeyRepeatTime, gameTime, ref lastNext, ref lastPrevious) * 1;
         }
 
         protected override void Draw(GameTime gameTime)

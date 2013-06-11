@@ -26,8 +26,8 @@ namespace Daggerfall
             this.Angle = Angle.Daggerfall(reader.ReadInt32());
             this.Block = block;
 
-            var b1 = State.Models.Records.ContainsKey(u1);
-            var b2 = State.Models.Records.ContainsKey(u2);
+            var b1 = State.Models.RecordMap.ContainsKey(u1);
+            var b2 = State.Models.RecordMap.ContainsKey(u2);
         }
 
         int u1, u2;

@@ -41,7 +41,7 @@ namespace Daggerfall {
 					Automap[x, y] = reader.ReadByte();
 
 			string filename = reader.ReadNulTerminatedAsciiString(13);
-			if (filename != record.Id) throw new Exception();
+			if (filename != record.Key) throw new Exception();
             for (int index = 0; index < Chunks.Length; index++)
                 Chunks[index].LoadFilename(reader);
 

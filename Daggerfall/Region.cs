@@ -87,7 +87,7 @@ namespace Daggerfall {
 		public RegionArchive(State state, string path)
 			: base(state) {
 			archive = new BaseArchive(state, path);
-			regions = new Region[archive.Records.Count / 4];
+			regions = new Region[archive.RecordMap.Count / 4];
 		}
 
 		public int Count { get { return regions.Length; } }
@@ -98,10 +98,10 @@ namespace Daggerfall {
 					var region = regions[index] = new Region(State, index);
 					string extension = string.Format(".{0:D3}", index);
 					archive.region = region;
-					var boop = archive.Records[MapNames + extension].Contents;
-					boop = archive.Records[MapTable + extension].Contents;
-					boop = archive.Records[MapPItem + extension].Contents;
-					boop = archive.Records[MapDItem + extension].Contents;
+					var boop = archive.RecordMap[MapNames + extension].Value;
+					boop = archive.RecordMap[MapTable + extension].Value;
+					boop = archive.RecordMap[MapPItem + extension].Value;
+					boop = archive.RecordMap[MapDItem + extension].Value;
 				}
 				return regions[index];
 			}
@@ -118,14 +118,14 @@ namespace Daggerfall {
 			public BaseArchive(State state, string path) : base(state, path) { }
 
 			protected override object Load(Record record) {
-				if(record.Id.StartsWith(MapNames))
+				if(record.Key.StartsWith(MapNames))
 					region.LoadMapNames(Reader);
-				else if(record.Id.StartsWith(MapTable)) {
+				else if(record.Key.StartsWith(MapTable)) {
 					foreach(var location in region.Locations)
 						location.LoadMapTable(Reader);
-				} else if(record.Id.StartsWith(MapPItem)) {
+				} else if(record.Key.StartsWith(MapPItem)) {
 					region.LoadMapPItem(Reader);
-				} else if(record.Id.StartsWith(MapDItem)) {
+				} else if(record.Key.StartsWith(MapDItem)) {
 					region.LoadMapDItem(Reader);
 				} else
 					throw new NotImplementedException();

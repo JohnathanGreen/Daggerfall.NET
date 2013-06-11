@@ -12,7 +12,7 @@ namespace Daggerfall {
 		public ModelArchive(State state, string path) : base(state, path) { }
 
 		protected override Model Load(Record record) {
-			return new Model(State, Reader, record.Size);
+			return new Model(State, Reader, (int)record.Size);
 		}
 	}
 

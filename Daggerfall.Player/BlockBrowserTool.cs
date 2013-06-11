@@ -14,8 +14,8 @@ namespace Daggerfall.Player
         {
         }
 
-        public override int Count { get { return State.Blocks.Records.Count; } }
-        public override string ToolName { get { return "Block browser"; } }
+        public override int Count { get { return State.Blocks.RecordMap.Count; } }
+        public override string ElementName { get { return "Block"; } }
 
         public override void Draw(GameTime gameTime)
         {
@@ -25,7 +25,7 @@ namespace Daggerfall.Player
 
             base.Draw(gameTime);
 
-            var block = State.Blocks.RecordList[Index].Contents;
+            var block = State.Blocks.Records[ElementIndex].Value;
             Matrix world = Matrix.Identity;
             if(block != null)
                 block.Draw(effect, ref world, true, false);

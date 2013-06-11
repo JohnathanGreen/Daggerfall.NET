@@ -15,14 +15,16 @@ namespace Daggerfall.Player
     {
         public BrowserTool(DaggerfallGame game) : base(game) { }
 
-        int index;
+        protected int elementIndex;
 
         public abstract int Count { get; }
+        public override string ToolName { get { return ElementName + " browser"; } }
+        public abstract string ElementName { get; }
 
-        public int Index
+        public int ElementIndex
         {
-            get { return index; }
-            set { index = Math.Max(0, Math.Min(Count - 1, value)); }
+            get { return elementIndex; }
+            set { elementIndex = value.Wrap(Count); }
         }
 
         public override void Draw(GameTime gameTime)
@@ -34,7 +36,7 @@ namespace Daggerfall.Player
         {
             get
             {
-                return base.ControlsText + string.Format("; Change current item with PageUp/PageDown ({0} of {1})", Index + 1, Count);
+                return base.ControlsText + string.Format("; Change current item with PageUp/PageDown ({0} of {1})", ElementIndex + 1, Count);
             }
         }
 
@@ -42,17 +44,15 @@ namespace Daggerfall.Player
 
         public override void Update(GameTime gameTime)
         {
+            if (Game.Tools[Game.CurrentTool] != this)
+                return;
             var keyboard = Keyboard.GetState();
-            TimeSpan repeatTime = TimeSpan.FromSeconds(0.1);
 
             bool fast = keyboard.IsKeyDown(Keys.LeftShift) || keyboard.IsKeyDown(Keys.RightShift);
             bool zoom = keyboard.IsKeyDown(Keys.LeftControl) || keyboard.IsKeyDown(Keys.RightControl);
             int speed = zoom ? 100 : fast ? 10 : 1;
 
-            if (keyboard.CheckRepeat(Keys.PageUp, gameTime, ref lastPrevious, repeatTime))
-                Index -= speed;
-            if (keyboard.CheckRepeat(Keys.PageDown, gameTime, ref lastNext, repeatTime))
-                Index += speed;
+            ElementIndex += keyboard.CheckNextPreviousKeys(Keys.PageDown, Keys.PageUp, KeyRepeatTime, gameTime, ref lastNext, ref lastPrevious) * speed;
 
             base.Update(gameTime);
         }

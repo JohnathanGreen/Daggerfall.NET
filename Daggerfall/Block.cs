@@ -35,9 +35,9 @@ namespace Daggerfall {
 		public BlockArchive(State state, string path) : base(state, path) { }
 
 		protected override Block Load(Record record) {
-			if (record.Id.EndsWith(".RMB")) return new ExteriorBlock(State, Reader, record);
-			if (record.Id.EndsWith(".RDB")) return new InteriorBlock(State, Reader);
-			if (record.Id == "FOO" || record.Id.EndsWith(".RDI")) return null;
+			if (record.Key.EndsWith(".RMB")) return new ExteriorBlock(State, Reader, record);
+			if (record.Key.EndsWith(".RDB")) return new InteriorBlock(State, Reader);
+			if (record.Key == "FOO" || record.Key.EndsWith(".RDI")) return null;
 			throw new NotImplementedException();
 		}
 	}

@@ -15,8 +15,8 @@ namespace Daggerfall.Player
         {
         }
 
-        public override int Count { get { return State.Models.Records.Count; } }
-        public override string ToolName { get { return "Model browser"; } }
+        public override int Count { get { return State.Models.RecordMap.Count; } }
+        public override string ElementName { get { return "Model"; } }
 
         public override void Draw(GameTime gameTime)
         {
@@ -26,7 +26,7 @@ namespace Daggerfall.Player
 
             base.Draw(gameTime);
 
-            var model = State.Models.RecordList[Index].Contents;
+            var model = State.Models.Records[ElementIndex].Value;
             Matrix world = Matrix.Identity;
             model.Draw(effect, ref world);
             DrawText();

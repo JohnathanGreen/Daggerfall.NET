@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="BlockBrowserTool.cs" />
     <Compile Include="BrowserTool.cs" />
+    <Compile Include="EntryPoint.cs" />
     <Compile Include="ModelBrowserTool.cs" />
     <Compile Include="DaggerfallGame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -60,6 +61,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TextureBrowserTool.cs" />
     <Compile Include="Tool.cs" />
     <Compile Include="ViewerTool.cs" />
   </ItemGroup>
@@ -69,6 +76,8 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\DebugFont.xnb" />
+    <None Include="Resources\UIFont.xnb" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Daggerfall.Editor\Daggerfall.Editor.csproj">
@@ -83,6 +92,12 @@
       <Project>{7de47032-a904-4c29-bd22-2d235e8d91ba}</Project>
       <Name>MonoGame.Framework.WindowsGL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

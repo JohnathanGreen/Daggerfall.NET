@@ -92,7 +92,7 @@ namespace Daggerfall.Editor
 
             BlockStore.Clear();
             blockList.NodeStore.Clear();
-            var blocks = state.Blocks.RecordList;
+            var blocks = state.Blocks.Records;
             foreach (Block item in blocks)
             {
                 if (item is ExteriorBlock)
